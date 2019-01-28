@@ -530,7 +530,7 @@ public class ZwjbxxController  extends BaseController<ZwjbxxVO>{
 			//判断前台是否传过来UUID值
 			if(vo.getUuid()!=null&&!"".equals(vo.getUuid())){
 				ZwjbxxVO dbzw=zwjbxxService.doFindById(vo.getUuid());
-				if(dbzw.getZwzt()!=vo.getZwzt()&&dbzw.getQyid()!=null){
+				if(dbzw.getZwzt()!=vo.getZwzt()){
 					vo.setXgrid(CurrentUserUtil.getCurrentUserId());
 					vo.setXgrmc(CurrentUserUtil.getCurrentUserName());
 					zwjbxxService.doUpdateByVO(vo);
