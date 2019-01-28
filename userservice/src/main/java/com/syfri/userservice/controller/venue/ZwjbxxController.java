@@ -516,4 +516,36 @@ public class ZwjbxxController  extends BaseController<ZwjbxxVO>{
 		}
 		return resultVO;
 	}
+	/**
+	 * 更新展位状态
+	 * @param vo
+	 * @return
+	 * @throws Exception
+	 */
+	@PostMapping("changePaid")
+	@Transactional
+	public @ResponseBody ResultVO changePaid(@RequestBody ZwjbxxVO vo) throws Exception{
+		ResultVO resultVO = ResultVO.build();
+		try {
+			//判断前台是否传过来UUID值
+			if(vo.getUuid()!=null&&!"".equals(vo.getUuid())){
+				ZwjbxxVO dbzw=zwjbxxService.doFindById(vo.getUuid());
+				if(dbzw.getZwzt()!=vo.getZwzt()&&dbzw.getQyid()!=null){
+					vo.setXgrid(CurrentUserUtil.getCurrentUserId());
+					vo.setXgrmc(CurrentUserUtil.getCurrentUserName());
+					zwjbxxService.doUpdateByVO(vo);
+					ZwjbxxVO newdbzw=zwjbxxService.doFindById(vo.getUuid());
+					resultVO.setResult(newdbzw);
+					resultVO.setMsg("success");
+					zwlogService.createZwlog(dbzw,newdbzw, ZwlogServiceImpl.UPDATE,"changePaid");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultVO.setMsg("修改缴费状态失败！");
+			resultVO.setCode(EConstants.CODE.FAILURE);
+			return 	resultVO;
+		}
+		return 	resultVO;
+	}
 }
