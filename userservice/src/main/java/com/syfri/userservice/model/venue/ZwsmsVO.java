@@ -34,6 +34,11 @@ public class ZwsmsVO extends ValueObject implements Serializable{
 	private String zwh;	//英文公司名称
 	private String deleteFlag;	//删除标志
 
+	private String fssjStr;	//发送时间
+	private String qymc;	//企业名称
+	private String fssj_begin;	//发送时间开始时间
+	private String fssj_end;	//发送时间结束时间
+
 	public String getZwuuid() {
 		return zwuuid;
 	}
@@ -181,5 +186,37 @@ public class ZwsmsVO extends ValueObject implements Serializable{
 	}
 	public void setDeleteFlag(String deleteFlag){
 		this.deleteFlag = deleteFlag;
+	}
+
+	public String getFssjStr() {
+		return fssjStr;
+	}
+
+	public void setFssjStr(String fssjStr) {
+		this.fssjStr = fssjStr;
+	}
+
+	public String getQymc() {
+		return qymc;
+	}
+
+	public void setQymc(String qymc) {
+		this.qymc = qymc;
+	}
+
+	public String getFssj_begin() {
+		return fssj_begin;
+	}
+
+	public void setFssj_begin(String fssj_begin) {
+		this.fssj_begin = fssj_begin;
+	}
+
+	public String getFssj_end() {
+		return fssj_end;
+	}
+
+	public void setFssj_end(String fssj_end) {
+		this.fssj_end = fssj_end;
 	}
 }

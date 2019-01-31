@@ -34,7 +34,6 @@ public class ZwsmsServiceImpl extends BaseServiceImpl<ZwsmsVO> implements ZwsmsS
 		zs.setZwh(vo.getZwh());
 		zs.setZwuuid(vo.getUuid());
 		zs.setSjhm(qvo.getLxrsj());
-		zs.setQyid(qvo.getQyid());
 		zs.setErrmsg(result.errMsg);
 		zs.setSid(result.sid);
 		zs.setFee(result.fee+"");
@@ -42,5 +41,9 @@ public class ZwsmsServiceImpl extends BaseServiceImpl<ZwsmsVO> implements ZwsmsS
 		zs.setResult(result.result+"");
 		zs.setFssj(new Date());
 		zwsmsDAO.doInsertByVO(zs);
+	}
+
+	public int doDeleteByFssj(ZwsmsVO vo){
+		return zwsmsDAO.doDeleteByFssj(vo);
 	}
 }

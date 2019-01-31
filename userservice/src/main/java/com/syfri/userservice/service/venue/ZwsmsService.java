@@ -10,4 +10,6 @@ import com.syfri.userservice.model.venue.ZwsmsVO;
 
 public interface ZwsmsService  extends BaseService<ZwsmsVO>{
     public void createZwsmslog(ShiroUser user, ZwjbxxVO vo , QyjbxxVO qvo, SmsSingleSenderResult result);
+
+    int doDeleteByFssj(ZwsmsVO vo);
 }

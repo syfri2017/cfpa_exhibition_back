@@ -67,7 +67,7 @@
 		 and t.qyid = #{qyid}
 		</if>
 		<if test="zwh != null and zwh != '' ">
-		 and t.zwh = #{zwh}
+		 and t.zwh LIKE concat(concat('%',#{zwh}),'%') ESCAPE '\'
 		</if>
 		<if test="zwuuid != null and zwuuid != '' ">
 		 and t.zwuuid = #{zwuuid}
@@ -112,23 +112,33 @@
 	</select>
 
 	<!--4.按条件查询记录-->
-	<select id="doSearchListByVO" parameterType="ZwsmsVO"  resultType="ZwsmsVO"> 
-		SELECT 
-			<include refid="SQL_CONTENT"/>
-		FROM CFPA_ZW_SMS t  WHERE t.DELETE_FLAG = 'N' 
+	<select id="doSearchListByVO" parameterType="ZwsmsVO"  resultType="ZwsmsVO">
+		SELECT
+			<include refid="SQL_CONTENT"/>,
+		DECODE(t1.usertype,'ENG',t1.ywgsmc,t1.zwgsmc) qymc,
+		TO_CHAR(t.fssj,'yyyy-MM-dd HH24:mi:ss') fssjStr
+		FROM CFPA_ZW_SMS t
+		left join (select a.qyid, a.zwgsmc, a.ywgsmc, s.usertype from CFPA_QY_JBXX a
+		Left Join SYS_ACCOUNT s on s.userid = a.userid AND s.DELETE_FLAG = 'N') t1
+		on t1.qyid = t.qyid
+		WHERE t.DELETE_FLAG = 'N'
+		<if test="qymc != null and qymc != '' ">
+			and DECODE(t1.usertype, 'ENG', t1.ywgsmc, t1.zwgsmc) LIKE concat(concat('%',#{qymc}),'%') ESCAPE '\'
+		</if>
 			<include refid="SQL_CONDITION"/>
+		order by t.fssj DESC
 	</select>
 
 	<!--5.根据ID查询记录-->
-	<select id="doFindById" parameterType="ZwsmsVO"  resultType="ZwsmsVO">  
-		SELECT 
+	<select id="doFindById" parameterType="ZwsmsVO"  resultType="ZwsmsVO">
+		SELECT
 		<include refid="SQL_CONTENT"/>
-		FROM CFPA_ZW_SMS t 
-		WHERE t.DELETE_FLAG = 'N' AND  t.uuid = #{value} 
+		FROM CFPA_ZW_SMS t
+		WHERE t.DELETE_FLAG = 'N' AND  t.uuid = #{value}
 	</select>
 
 	<!--6.按照VO插入-->
-	<insert  id="doInsertByVO"  parameterType="ZwsmsVO"> 
+	<insert  id="doInsertByVO"  parameterType="ZwsmsVO">
 		<selectKey resultType="String" order="BEFORE" keyProperty="uuid">
 			SELECT SYS_GUID() AS uuid FROM DUAL
 		</selectKey>
@@ -137,10 +147,10 @@
 	 </insert>
 
 	<!--7.批量插入-->
-	<insert  id="doBatchInsertByList"  parameterType="java.util.List"> 
+	<insert  id="doBatchInsertByList"  parameterType="java.util.List">
 		INSERT INTO CFPA_ZW_SMS(uuid,cjrid,cjrmc,cjsj,xgrid,xgrmc,xgsj,reserve1,reserve2,reserve3,reserve4,zt,errmsg,ext,sid,fee,result,fssj,fscs,sjhm,qyid,zwh,zwuuid,delete_flag)
-		SELECT SYS_GUID() uuid, A.* 
-		FROM ( 
+		SELECT SYS_GUID() uuid, A.*
+		FROM (
 		<foreach collection="list" item="item" index="index" separator="UNION ALL" >
 		SELECT
 			#{item.uuid,jdbcType=VARCHAR} uuid,#{item.cjrid,jdbcType=VARCHAR} cjrid,#{item.cjrmc,jdbcType=VARCHAR} cjrmc,#{item.cjsj,jdbcType=DATE} cjsj,#{item.xgrid,jdbcType=VARCHAR} xgrid,#{item.xgrmc,jdbcType=VARCHAR} xgrmc,#{item.xgsj,jdbcType=DATE} xgsj,#{item.reserve1,jdbcType=VARCHAR} reserve1,#{item.reserve2,jdbcType=VARCHAR} reserve2,#{item.reserve3,jdbcType=VARCHAR} reserve3,#{item.reserve4,jdbcType=DATE} reserve4,#{item.zt,jdbcType=VARCHAR} zt,#{item.errmsg,jdbcType=VARCHAR} errmsg,#{item.ext,jdbcType=VARCHAR} ext,#{item.sid,jdbcType=VARCHAR} sid,#{item.fee,jdbcType=VARCHAR} fee,#{item.result,jdbcType=VARCHAR} result,#{item.fssj,jdbcType=DATE} fssj,#{item.fscs,jdbcType=VARCHAR} fscs,#{item.sjhm,jdbcType=VARCHAR} sjhm,#{item.qyid,jdbcType=VARCHAR} qyid,#{item.zwh,jdbcType=VARCHAR} zwh,#{item.zwuuid,jdbcType=VARCHAR} zwuuid,'N' delete_flag
@@ -150,13 +160,13 @@
 	</insert>
 
 	<!--8.按主键逻辑删除-->
-	<update id="doDeleteById"  parameterType="String"> 
-		UPDATE  CFPA_ZW_SMS t SET t.DELETE_FLAG = 'Y'  WHERE 1=1   AND t.uuid = #{value} 
+	<update id="doDeleteById"  parameterType="String">
+		UPDATE  CFPA_ZW_SMS t SET t.DELETE_FLAG = 'Y'  WHERE 1=1   AND t.uuid = #{value}
 	</update>
 
 	<!--9.按复合条件逻辑更新-->
-	<update  id="doUpdateByVO"  parameterType="ZwsmsVO"> 
-		UPDATE   CFPA_ZW_SMS  
+	<update  id="doUpdateByVO"  parameterType="ZwsmsVO">
+		UPDATE   CFPA_ZW_SMS
 		<set>
 			<if test="uuid != null">uuid=#{uuid},</if>
 			<if test="cjrid != null">cjrid=#{cjrid},</if>
@@ -194,7 +204,7 @@
 		<foreach collection="list" item="item" index="index" separator="," >
 			#{item.uuid,jdbcType=VARCHAR} uuid,#{item.cjrid,jdbcType=VARCHAR} cjrid,#{item.cjrmc,jdbcType=VARCHAR} cjrmc,#{item.cjsj,jdbcType=DATE} cjsj,#{item.xgrid,jdbcType=VARCHAR} xgrid,#{item.xgrmc,jdbcType=VARCHAR} xgrmc,#{item.xgsj,jdbcType=DATE} xgsj,#{item.reserve1,jdbcType=VARCHAR} reserve1,#{item.reserve2,jdbcType=VARCHAR} reserve2,#{item.reserve3,jdbcType=VARCHAR} reserve3,#{item.reserve4,jdbcType=DATE} reserve4,#{item.zt,jdbcType=VARCHAR} zt,#{item.errmsg,jdbcType=VARCHAR} errmsg,#{item.ext,jdbcType=VARCHAR} ext,#{item.sid,jdbcType=VARCHAR} sid,#{item.fee,jdbcType=VARCHAR} fee,#{item.result,jdbcType=VARCHAR} result,#{item.fssj,jdbcType=DATE} fssj,#{item.fscs,jdbcType=VARCHAR} fscs,#{item.sjhm,jdbcType=VARCHAR} sjhm,#{item.qyid,jdbcType=VARCHAR} qyid,#{item.zwh,jdbcType=VARCHAR} zwh,#{item.zwuuid,jdbcType=VARCHAR} zwuuid,'N' delete_flag
 		</foreach>
-		ON DUPLICATE KEY UPDATE   
+		ON DUPLICATE KEY UPDATE
 			uuid = VALUES(uuid),
 			cjrid = VALUES(cjrid),
 			cjrmc = VALUES(cjrmc),
@@ -222,12 +232,25 @@
 	</update>
 
 	<!--11.根据对象查询记录-->
-	<select id="doFindByVO" parameterType="ZwsmsVO"  resultType="ZwsmsVO">  
-		SELECT 
+	<select id="doFindByVO" parameterType="ZwsmsVO"  resultType="ZwsmsVO">
+		SELECT
 		<include refid="SQL_CONTENT"/>
-		FROM CFPA_ZW_SMS t 
-		WHERE t.DELETE_FLAG = 'N' 
+		FROM CFPA_ZW_SMS t
+		WHERE t.DELETE_FLAG = 'N'
 		<include refid="SQL_CONDITION"/>
 	</select>
+
+	<!--按日志时间清空日志-->
+	<update  id="doDeleteByFssj"  parameterType="ZwsmsVO">
+		UPDATE   CFPA_ZW_SMS
+		<set>
+			delete_flag='Y',
+			xgsj=SYSDATE,
+			<if test="xgrid != null">xgrid=#{xgrid},</if>
+			<if test="xgrmc != null">xgrmc=#{xgrmc}</if>
+		</set>
+		WHERE fssj &gt; to_date(#{fssj_begin},'yyyy/mm/dd HH24:Mi:SS')
+		and fssj &lt; to_date(#{fssj_end},'yyyy/mm/dd HH24:Mi:SS')
+	</update>
 
 </mapper>
