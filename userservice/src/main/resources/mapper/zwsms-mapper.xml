@@ -61,7 +61,7 @@
 		 and t.fscs = #{fscs}
 		</if>
 		<if test="sjhm != null and sjhm != '' ">
-		 and t.sjhm = #{sjhm}
+		 and t.sjhm LIKE concat(concat('%',#{sjhm}),'%') ESCAPE '\'
 		</if>
 		<if test="qyid != null and qyid != '' ">
 		 and t.qyid = #{qyid}
