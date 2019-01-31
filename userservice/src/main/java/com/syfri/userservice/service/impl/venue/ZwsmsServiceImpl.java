@@ -34,6 +34,7 @@ public class ZwsmsServiceImpl extends BaseServiceImpl<ZwsmsVO> implements ZwsmsS
 		zs.setZwh(vo.getZwh());
 		zs.setZwuuid(vo.getUuid());
 		zs.setSjhm(qvo.getLxrsj());
+		zs.setQyid(qvo.getQyid());
 		zs.setErrmsg(result.errMsg);
 		zs.setSid(result.sid);
 		zs.setFee(result.fee+"");
