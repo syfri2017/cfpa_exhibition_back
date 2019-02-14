@@ -179,6 +179,8 @@ public class ZwjbxxController  extends BaseController<ZwjbxxVO>{
 				//删除展位
 				ZwjbxxVO zw=new ZwjbxxVO();
 				zw.setZgid(zwjbxxVOs.get(0).getZgid());
+				zw.setXgrid(CurrentUserUtil.getCurrentUserId());
+				zw.setXgrmc(CurrentUserUtil.getCurrentUserName());
 				zwjbxxService.doDeleteByVO(zw);
 				for(ZwjbxxVO vo : zwjbxxVOs){
 					if(vo.getUuid()!=null&&!vo.getUuid().equals("")){
