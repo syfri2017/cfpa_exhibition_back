@@ -207,7 +207,8 @@
 			<if test="zwkd != null">zwkd=#{zwkd},</if>
 			<if test="zwcd != null">zwcd=#{zwcd},</if>
 			<if test="zwmc != null">zwmc=#{zwmc},</if>
-			<if test="deleteFlag != null">delete_flag='N',</if>
+			<if test="deleteFlag == null">delete_flag='N',</if>
+			<if test="deleteFlag != null">delete_flag=#{deleteFlag},</if>
 			<if test="cjrid != null">cjrid=#{cjrid},</if>
 			<if test="cjrmc != null">cjrmc=#{cjrmc},</if>
 			<if test="cjsj != null">cjsj=TO_DATE(#{cjsj},'yyyy-MM-dd HH24:mi:ss'),</if>
