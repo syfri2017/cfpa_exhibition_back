@@ -219,5 +219,13 @@
 			AND t.usertype = #{usertype}
 		</if>
 	</select>
+	<!--暂时保存明文密码 用于系统迁移 add by yushch 20190219-->
+	<update  id="doUpdateByUsername"  parameterType="AccountVO">
+		UPDATE SYS_ACCOUNT
+		<set>
+			<if test="reserve1 != null">reserve1=#{reserve1}</if>
+		</set>
+		WHERE  username = #{username}
+	</update>
 
 </mapper>

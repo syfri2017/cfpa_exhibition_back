@@ -105,4 +105,8 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountVO> implements Ac
 	public List<AccountVO> doSearchListByVO2(AccountVO accountVO){
 		return accountDAO.doSearchListByVO2(accountVO);
 	}
+
+	public int doUpdateByUsername(AccountVO accountVO){
+		return accountDAO.doUpdateByUsername(accountVO);
+	}
 }

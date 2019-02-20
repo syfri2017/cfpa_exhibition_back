@@ -9,6 +9,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -92,6 +93,15 @@ public class InfoCollectRealm extends AuthorizingRealm{
 		List<ResourceTree> resourceTrees = resourceService.getMenuTree(roleList);
 		shiroUser.setResourceTrees(resourceTrees);
 
+		//add by yushch 比对密文密码，暂存明文密码 用于系统迁移 20190220
+		String newPassword = new SimpleHash("MD5", ((InfoCollectToken) token).getPassword(), ByteSource.Util.bytes(account.getSalt()),1).toHex();
+		if(account.getPassword().equals(newPassword)){
+			AccountVO vo2 = new AccountVO();
+			vo2.setReserve1(String.valueOf(((InfoCollectToken) token).getPassword()));
+			vo2.setUsername(username);
+			accountService.doUpdateByUsername(vo2);
+		}
+		//end add
 
 		//账号判断（密文）
 		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(

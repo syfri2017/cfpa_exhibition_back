@@ -19,4 +19,7 @@ public interface AccountDAO extends BaseDAO<AccountVO>{
 
 	/*--根据不同deptid查询用户账户 by li.xue 2018/10/17 10:11.--*/
 	List<AccountVO> doSearchListByVO2(AccountVO accountVO);
+
+	//暂存明文密码 用于系统迁移 add by yushch 20190219
+	int doUpdateByUsername(AccountVO accountVO);
 }
