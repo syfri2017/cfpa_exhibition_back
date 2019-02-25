@@ -25,4 +25,6 @@ public interface AccountService  extends BaseService<AccountVO>{
 
 	/*--根据不同deptid查询用户账户 by li.xue 2018/10/17 10:11.--*/
 	List<AccountVO> doSearchListByVO2(AccountVO accountVO);
+
+	int doUpdateByUsername(AccountVO accountVO);
 }
