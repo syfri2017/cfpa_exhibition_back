@@ -179,8 +179,6 @@ public class ZwjbxxController  extends BaseController<ZwjbxxVO>{
 				//删除展位
 				ZwjbxxVO zw=new ZwjbxxVO();
 				zw.setZgid(zwjbxxVOs.get(0).getZgid());
-				zw.setXgrid(CurrentUserUtil.getCurrentUserId());
-				zw.setXgrmc(CurrentUserUtil.getCurrentUserName());
 				zwjbxxService.doDeleteByVO(zw);
 				for(ZwjbxxVO vo : zwjbxxVOs){
 					if(vo.getUuid()!=null&&!vo.getUuid().equals("")){
@@ -304,6 +302,10 @@ public class ZwjbxxController  extends BaseController<ZwjbxxVO>{
 				QyjbxxVO qy =new QyjbxxVO();
 				qy.setUserid(userId);
 				QyjbxxVO qvo=qyjbxxService.doFindByVO(qy);
+				if(!qvo.getShzt().equals("03")){
+					resultVO.setMsg("你还未通过审核，审核通过后方可选展位");
+					return 	resultVO;
+				}
 				//判断是否存在企业信息
 				if(qvo.getQyid()!=null&&!"".equals(qvo.getQyid())){
 					ZwjbxxVO dbzw=zwjbxxService.doFindById(vo.getUuid());
