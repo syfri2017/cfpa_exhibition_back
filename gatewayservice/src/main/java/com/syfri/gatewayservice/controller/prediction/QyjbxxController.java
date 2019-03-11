@@ -15,8 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import java.io.*;
 import java.util.List;
@@ -96,115 +94,6 @@ public class QyjbxxController extends BaseController<QyjbxxVO> {
                 result.setYyzzBase64(photo64);
             }
             resultVO.setResult(result);
-        } catch (Exception e) {
-            logger.error("{}", e.getMessage());
-            resultVO.setCode(EConstants.CODE.FAILURE);
-        }
-        return resultVO;
-    }
-
-    //查询当前邮箱是否被注册（用户表、基本信息表）
-    //add by yushch 20181018
-    @ApiOperation(value = "根据邮箱查询用户数量", notes = "查询")
-    @ApiImplicitParam(name = "mail", value = "邮箱")
-    @GetMapping("/getMailNum/{mail}/static")
-    public @ResponseBody
-    ResultVO getMailNum(@PathVariable String mail) {
-        ResultVO resultVO = ResultVO.build();
-        try {
-            resultVO.setResult(qyjbxxService.doSearchCountByMail(mail));
-        } catch (Exception e) {
-            logger.error("{}", e.getMessage());
-            resultVO.setCode(EConstants.CODE.FAILURE);
-        }
-        return resultVO;
-    }
-
-    //新建基本信息时营业执照存在根目录下，插入基本信息时移动图片到qyid文件夹下
-    //add by yushch 20181102
-    @RequestMapping(value = "/movePic")
-    public QyjbxxVO movePic(@RequestBody QyjbxxVO vo) {
-        // 文件上传固定的路径
-        StringBuffer relativePath = new StringBuffer(cpjsProperties.getSavePath());
-        StringBuffer new_folder = new StringBuffer();
-        new_folder = new StringBuffer(vo.getQyid()).append("/");
-        String folderName = relativePath.toString() + new_folder;
-        //创建文件夹
-        File dir = new File(folderName);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File file = new File(relativePath + vo.getSrc());
-        String destinationFloderUrl = new StringBuffer(folderName).append(vo.getSrc()).toString();
-        //检查源文件是否合法
-        if (file.isFile() && file.exists()) {
-            String destinationFile = destinationFloderUrl;
-            if (!file.renameTo(new File(destinationFile))) {
-                this.logger.error("移动文件失败！");
-                return vo;
-            }
-        } else {
-            this.logger.error("要备份的文件路径不正确，移动失败！");
-            return vo;
-        }
-        if (vo.getYyzzgs().equals(".pdf")) {
-            String name = vo.getSrc().substring(0, vo.getSrc().lastIndexOf("."));
-            String pdfSrc = name + ".pdf";
-            File pdfFile = new File(relativePath + pdfSrc);
-            String destinationFloderUrl2 = new StringBuffer(folderName).append(pdfSrc).toString();
-            //检查源文件是否合法
-            if (pdfFile.isFile() && pdfFile.exists()) {
-                String destinationFile2 = destinationFloderUrl2;
-                if (!pdfFile.renameTo(new File(destinationFile2))) {
-                    this.logger.error("移动文件失败！");
-                    return vo;
-                }
-            } else {
-                this.logger.error("要备份的文件路径不正确，移动失败！");
-                return vo;
-            }
-        }
-        String dbPath = new_folder.append(vo.getSrc()).toString();
-        vo.setSrc(dbPath);
-        qyjbxxService.doUpdateByVO(vo);
-        return vo;
-    }
-
-    /**
-     * @Description: 统计分析查询是否信息确认
-     * @Author: rliu
-     * @Date: 2019/1/4 10:35
-     */
-    @ApiOperation(value = "统计分析查询是否信息确认", notes = "vo")
-    @RequestMapping("/ifConfirmedTjfx")
-    public @ResponseBody
-    ResultVO ifConfirmedTjfx(@RequestBody QyjbxxVO vo) {
-        ResultVO resultVO = ResultVO.build();
-        try {
-            List<QyjbxxVO> result = qyjbxxService.ifConfirmedTjfx(vo);
-            resultVO.setResult(result);
-        } catch (Exception e) {
-            logger.error("{}", e.getMessage());
-            resultVO.setCode(EConstants.CODE.FAILURE);
-        }
-        return resultVO;
-    }
-
-    /**
-     * @Description: 统计分析查询是否信息确认_详情
-     * @Author: rliu
-     * @Date: 2019/1/7 10:35
-     */
-    @ApiOperation(value = "统计分析查询是否信息确认_详情", notes = "列表")
-    @RequestMapping("/ifConfirmedTjfxDetail")
-    public @ResponseBody
-    ResultVO ifConfirmedTjfxDetail(@RequestBody QyjbxxVO qyjbxxVO) {
-        ResultVO resultVO = ResultVO.build();
-        try {
-            PageHelper.startPage(qyjbxxVO.getPageNum(), qyjbxxVO.getPageSize());
-            List<QyjbxxVO> list = qyjbxxService.ifConfirmedTjfxDetail(qyjbxxVO);
-            PageInfo<QyjbxxVO> pageInfo = new PageInfo<>(list);
-            resultVO.setResult(pageInfo);
         } catch (Exception e) {
             logger.error("{}", e.getMessage());
             resultVO.setCode(EConstants.CODE.FAILURE);
