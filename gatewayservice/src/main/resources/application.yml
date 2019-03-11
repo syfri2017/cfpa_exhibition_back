@@ -1,0 +1,120 @@
+#server
+server:
+  port: 8805
+
+#---------产品图片--------------------------
+qycpjs:
+  savePath: D://xfxh//upload//
+  fileServerUrl: http://10.119.119.222:80
+  vueServerUrl: http://10.119.119.222:80
+#------------------------------------------------------------
+#spring
+spring:
+  profiles:
+    active: dev
+  druid:
+    #配置druid连接池
+    datasource:
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  mail:
+    default-encoding: UTF-8
+    host: smtp.ym.163.com #邮箱SMTP服务器  QQ邮箱smtp.qq.com  网易个人免费smtp.163.com 网易企业邮箱smtp.ym.163.com
+    port: 25 #端口
+    protocol: smtp
+    username: committee@cfpa.cn
+    password: fe123456   #---------- QQ邮箱生成授权码： QQ邮箱-设置-账户- POP3/IMAP/SMTP/Exchange/CardDAV/CalDAV服务 - 开启服务
+  mybatis:
+    mapperLocations: classpath:mapper/*-mapper.xml
+    typeAliasesPackage: com.syfri.gatewayservice
+    basePackage: com.syfri.gatewayservice.dao
+    configuration:
+      cacheEnabled: false
+      lazyLoadingEnabled: false
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
+    prefix: classpath:/templates/
+    suffix: .html
+  redis:
+    host: 10.119.119.233
+    port: 6379
+    expire: 7200000
+    timeout: 0
+  http:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+  session:
+    timeout: 7200000
+#------------------------------------------------------------
+#pagehelper分页插件设置
+pagehelper:
+  helper-dialect: oracle
+  reasonable: true
+  support-methods-arguments: true
+  row-bounds-with-count: true
+  auto-dialect: true
+#------------------------------------------------------------
+logging:
+  level.root: info
+  level.com.syfri: debug
+  path: logs/
+  file: gatewayservice.log
+  ##########################################################
+  ###################  开发环境的profile  ###################
+  ##########################################################
+---
+spring:
+  profiles: dev
+  druid:
+    #配置druid连接池
+    datasource:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: oracle.jdbc.OracleDriver
+      url: jdbc:oracle:thin:@10.119.119.205:1521/XFXHDB
+#      url: jdbc:oracle:thin:@localhost:1521/orcl
+      username: XFXHZH
+      password: XFXHZH
+
+  ##########################################################
+  ###################  正式环境的profile  ###################
+  ##########################################################
+---
+spring:
+  profiles: produce
+  druid:
+    #配置druid连接池
+    datasource:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: oracle.jdbc.OracleDriver
+      url: jdbc:oracle:thin:@10.119.123.25:1521/XFXHDB
+      username: XFXHZH
+      password: XFXHZH
+
+
+  ##########################################################
+  ###################  正式环境的profile  ###################
+  ##########################################################
+---
+spring:
+  profiles: localhost
+  druid:
+    #配置druid连接池
+    datasource:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: oracle.jdbc.OracleDriver
+      url: jdbc:oracle:thin:@localhost:1521/XFXHDB
+      username: XFXHZH
+      password: XFXHZH
