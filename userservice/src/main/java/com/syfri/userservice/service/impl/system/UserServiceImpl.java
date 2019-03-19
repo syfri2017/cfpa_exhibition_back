@@ -99,11 +99,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserVO> implements UserServ
 					roles.add(new RoleVO("5E2EE48C361A4BBB825C4A2E8330102F"));
 				}
 				accountService.doDeleteAccountRoles(userVO.getUserid());
-				accountService.doInsertAccountRolesBatch(accountVO.getUserid(), roles, userVO.getAlterId(), userVO.getAlterName());
+				accountService.doInsertAccountRolesBatch(accountVO.getUserid(), roles);
 			}
 		}else{
 			accountService.doDeleteAccountRoles(userVO.getUserid());
-			accountService.doInsertAccountRolesBatch(accountVO.getUserid(), userVO.getRoles(), userVO.getAlterId(), userVO.getAlterName());
+			accountService.doInsertAccountRolesBatch(accountVO.getUserid(), userVO.getRoles());
 		}
 		return userVO;
 	}
