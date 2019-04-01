@@ -344,7 +344,7 @@
 				FROM TEMP_ZW
 			) GROUP BY QYID
 		) B ON A.QYID = B.QYID
-		ORDER BY ZWNUM DESC
+		ORDER BY ZWNUM DESC,ZWH
 	</select>
 	<!--15.查询企业选择的标准展位list及价格信息 add by yushch 20190116-->
 	<select id="doFindBzzwAndJgByVo" parameterType="ZwjbxxVO"  resultType="ZwjbxxVO">
