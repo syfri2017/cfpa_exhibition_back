@@ -394,6 +394,7 @@
 		to_number(TRANSLATE (replace(t1.zwh,'-',''),'0123456789'||replace(t1.zwh,'-',''),'0123456789')) asc
 	</select>
 	<!--16.查询企业选择的ODlist及价格信息 add by yushch 20190117-->
+	<!--
 	<select id="doFindOdAndJgByVo" parameterType="ZwjbxxVO"  resultType="ZwjbxxVO">
 		SELECT
 		t.uuid uuid,
@@ -410,5 +411,35 @@
 		</if>
 		ORDER BY substr(t.zwh,1,4) asc,
 		to_number(TRANSLATE (replace(t.zwh,'-',''),'0123456789'||replace(t.zwh,'-',''),'0123456789')) asc
+	</select>
+	-->
+	<select id="doFindOdAndJgByVo" parameterType="ZwjbxxVO"  resultType="ZwjbxxVO">
+		SELECT t1.uuid uuid ,
+		t1.zwh zwh ,
+		t1.zwmj zwmj,
+		c2.code_name cklx,
+		round(t2.fljg*t1.zwmj/t2.flmj,4) as zwjg,
+		round(t2.fljg_eng*t1.zwmj/t2.flmj, 4) as zwjg_eng
+		FROM
+		(
+		SELECT
+		t.uuid uuid,
+		t.zwh zwh,
+		t.zwmj zwmj,
+		case when t.cklx = '一面开' then '1'
+		when t.cklx = '两面开' then '2'
+		when t.cklx = '三面开' then '3'
+		when t.cklx = '全开' then '4' end as cklx
+		FROM CFPA_ZW_JBXX t
+		WHERE t.DELETE_FLAG = 'N' and t.zwlb = '光地' AND substr(t.zwh,0,2) = 'OD'
+		<if test="qyid != null and qyid != '' ">
+			and t.qyid = #{qyid}
+		</if>
+		)t1
+		inner join CFPA_ZW_FLXX t2 ON t2.DELETE_FLAG = 'N' AND t2.ZWFL = '3' AND t1.cklx = t2.kkfl
+		Left Join SYS_CODELIST c1 on c1.CODETYPE = 'CKLX' And c1.DELETE_FLAG = 'N'
+		Left Join SYS_CODELIST_DETAIL c2 On c2.CODEID = c1.CODEID And c2.DELETE_FLAG = 'N' and t1.cklx = c2.CODE_VALUE
+		ORDER BY substr(t1.zwh,1,4) asc,
+		to_number(TRANSLATE (replace(t1.zwh,'-',''),'0123456789'||replace(t1.zwh,'-',''),'0123456789')) asc
 	</select>
 </mapper>
