@@ -302,6 +302,23 @@ public class ZwjbxxController  extends BaseController<ZwjbxxVO>{
 				QyjbxxVO qy =new QyjbxxVO();
 				qy.setUserid(userId);
 				QyjbxxVO qvo=qyjbxxService.doFindByVO(qy);
+				if(!qvo.getShzt().equals("03")){
+					resultVO.setMsg("你还未通过审核，审核通过后方可选展位");
+					return 	resultVO;
+				}
+				if(qvo.getReserve3()==null||qvo.getReserve3().isEmpty()){
+					resultVO.setMsg("当前展位不可选，请联系组委会");
+					return 	resultVO;
+				}
+				//获取已选展位数量
+				ZwjbxxVO vo1=new ZwjbxxVO();
+				vo1.setQyid(qvo.getQyid());
+				List<ZwjbxxVO> dvo1=zwjbxxService.doSearchListByVO(vo1);
+				//限制每个用户只能选2个展位
+				if(dvo1.size()>1){
+					resultVO.setMsg("当前用户选择展位数量已达限额！");
+					return 	resultVO;
+				}
 				//判断是否存在企业信息
 				if(qvo.getQyid()!=null&&!"".equals(qvo.getQyid())){
 					ZwjbxxVO dbzw=zwjbxxService.doFindById(vo.getUuid());

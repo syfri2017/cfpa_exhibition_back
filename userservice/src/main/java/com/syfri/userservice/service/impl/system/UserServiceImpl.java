@@ -78,6 +78,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserVO> implements UserServ
 	@Override
 	public UserVO doUpdateUserRoles(UserVO userVO){
 		//修改账户表
+		String usertype = accountService.doFindById(userVO.getUserid()).getUsertype();
 		AccountVO accountVO = new AccountVO(userVO.getUserid(), userVO.getUsername(), userVO.getPassword(), userVO.getRealname());
 		accountVO.setUsertype(userVO.getUsertype());
 		accountService.doUpdateAccountByVO(accountVO);
@@ -89,7 +90,18 @@ public class UserServiceImpl extends BaseServiceImpl<UserVO> implements UserServ
 		}
 
 		//修改角色中间表信息
-		if(!"ZSYH".equals(userVO.getDeptid())){
+		if("ZSYH".equals(userVO.getDeptid())){
+			if(!usertype.equals(userVO.getUsertype())) {
+				List<RoleVO> roles = new ArrayList<>();
+				if("ENG".equals(userVO.getUsertype())){
+					roles.add(new RoleVO("8EA749A9ACB84A3490EBF8E31AC3C621"));
+				}else{
+					roles.add(new RoleVO("5E2EE48C361A4BBB825C4A2E8330102F"));
+				}
+				accountService.doDeleteAccountRoles(userVO.getUserid());
+				accountService.doInsertAccountRolesBatch(accountVO.getUserid(), roles);
+			}
+		}else{
 			accountService.doDeleteAccountRoles(userVO.getUserid());
 			accountService.doInsertAccountRolesBatch(accountVO.getUserid(), userVO.getRoles());
 		}
