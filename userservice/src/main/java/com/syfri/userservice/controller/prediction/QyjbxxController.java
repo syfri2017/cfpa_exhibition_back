@@ -123,9 +123,9 @@ public class QyjbxxController extends BaseController<QyjbxxVO> {
         vo.setShzt(param[2]);
 
         //excel标题
-        String[] title = {"公司名称", "联系人", "联系人手机", "数据状态", "审核状态"};
+        String[] title = {"公司名称", "联系人", "联系人手机","固定电话","电子邮箱", "数据状态", "审核状态"};
         //columns标题
-        String[] columns = {"zwgsmc", "lxr", "lxrsj", "sjztmc", "shztmc"};
+        String[] columns = {"zwgsmc", "lxr", "lxrsj", "bgdh","dzyx","sjztmc", "shztmc"};
         //excel文件名
         String fileName = "展会报名管理导出" + System.currentTimeMillis() + ".xls";
         //sheet名

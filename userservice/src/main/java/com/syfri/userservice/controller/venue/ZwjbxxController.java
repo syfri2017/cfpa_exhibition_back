@@ -306,10 +306,10 @@ public class ZwjbxxController  extends BaseController<ZwjbxxVO>{
 					resultVO.setMsg("你还未通过审核，审核通过后方可选展位");
 					return 	resultVO;
 				}
-				if(qvo.getReserve3()==null||qvo.getReserve3().isEmpty()){
-					resultVO.setMsg("当前展位不可选，请联系组委会");
-					return 	resultVO;
-				}
+//				if(qvo.getReserve3()==null||qvo.getReserve3().isEmpty()){
+//					resultVO.setMsg("当前展位不可选，请联系组委会");
+//					return 	resultVO;
+//				}
 				//获取已选展位数量
 				ZwjbxxVO vo1=new ZwjbxxVO();
 				vo1.setQyid(qvo.getQyid());
@@ -456,9 +456,9 @@ public class ZwjbxxController  extends BaseController<ZwjbxxVO>{
 		vo.setCklx(param[4]);
 
 		//excel标题
-		String[] title = {"展位号","公司名称","展位面积(m²)","展位类型","出口类型","展位状态","联系人名称","联系人电话","联系地址"};
+		String[] title = {"展位号","公司名称","展位面积(m²)","展位类型","出口类型","展位状态","联系人名称","联系人电话","联系地址","办公电话","电子邮箱"};
 		//columns列
-		String[] columns = {"zwh","qymc","zwmj","zwlb","cklx","zwztmc","lxr","lxrsj","yjdzxx"};
+		String[] columns = {"zwh","qymc","zwmj","zwlb","cklx","zwztmc","lxr","lxrsj","yjdzxx","bgdh","dzyx"};
 		//excel文件名
 		String fileName = "展位管理" + System.currentTimeMillis() + ".xls";
 		//sheet名

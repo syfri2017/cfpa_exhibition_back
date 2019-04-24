@@ -286,6 +286,8 @@
 		(CASE sa.usertype WHEN 'CHN' THEN q.zwgsmc WHEN 'ENG' THEN q.ywgsmc ELSE '' END) qymc, q.gsjc,
 		q.lxr,
 		q.lxrsj,
+		q.bgdh,
+		q.dzyx,
 		c2.code_name||c4.code_name||q.yjdzxx yjdzxx
 		FROM CFPA_ZW_JBXX t
 		left join CFPA_QY_JBXX q

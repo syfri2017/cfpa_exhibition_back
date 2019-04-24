@@ -44,6 +44,8 @@ public class ZwjbxxVO extends ValueObject implements Serializable{
 	private String zwztmc; //展位状态
 	private String lxr; //联系人
 	private String lxrsj; //联系人手机
+	private String bgdh;
+	private String dzyx;
 	private String yjdzxx; //邮寄地址详细
 
 	private String gsmc;   //公司名称
@@ -52,6 +54,22 @@ public class ZwjbxxVO extends ValueObject implements Serializable{
 
 	private String zwjg;	//展位价格
 	private String zwjg_eng;	//展位价格_eng
+
+	public String getBgdh() {
+		return bgdh;
+	}
+
+	public void setBgdh(String bgdh) {
+		this.bgdh = bgdh;
+	}
+
+	public String getDzyx() {
+		return dzyx;
+	}
+
+	public void setDzyx(String dzyx) {
+		this.dzyx = dzyx;
+	}
 
 	public String getGsjc() {
 		return gsjc;
