@@ -506,9 +506,9 @@ public class ZwjbxxController  extends BaseController<ZwjbxxVO>{
 		zwjbxxVO.setZgList(zgList);
 
 		//excel标题
-		String[] title = {"公司名称","联系人","联系人电话","展位数量","展位号"};
+		String[] title = {"公司名称","联系人","联系人电话","联系地址","办公电话","电子邮箱","展位数量","展位号","展位面积"};
 		//columns列
-		String[] columns = {"gsmc","lxr","lxrsj","zwnum","zwh"};
+		String[] columns = {"gsmc","lxr","lxrsj","yjdzxx","bgdh","dzyx","zwnum","zwh","zwmj"};
 		//excel文件名
 		String fileName = "展位分析" + System.currentTimeMillis() + ".xls";
 		//sheet名
