@@ -77,11 +77,11 @@ spring:
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
   mail:
     default-encoding: UTF-8
-    host: smtp.ym.163.com #邮箱SMTP服务器  QQ邮箱smtp.qq.com  网易个人免费smtp.163.com 网易企业邮箱smtp.ym.163.com
+    host: smtphz.qiye.163.com #邮箱SMTP服务器  QQ邮箱smtp.qq.com  网易个人免费smtp.163.com 网易企业邮箱smtp.ym.163.com
     port: 25 #端口
     protocol: smtp
     username: committee@cfpa.cn
-    password: fe123456   #---------- QQ邮箱生成授权码： QQ邮箱-设置-账户- POP3/IMAP/SMTP/Exchange/CardDAV/CalDAV服务 - 开启服务
+    password: CFPA1981   #---------- QQ邮箱生成授权码： QQ邮箱-设置-账户- POP3/IMAP/SMTP/Exchange/CardDAV/CalDAV服务 - 开启服务
   mybatis:
     mapperLocations: classpath:mapper/*-mapper.xml
     typeAliasesPackage: com.syfri.userservice
